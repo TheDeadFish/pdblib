@@ -9,7 +9,5 @@
 @popd
 
 :: install library
-::@if not exist %PROGRAMS%\local\include\peFile ( 
-::	mkdir %PROGRAMS%\local\include\peFile  )
-::@copy /Y src\peFile\*.h %PROGRAMS%\local\include\peFile
-::@copy /Y bin\libpeFile.a %PROGRAMS%\local\lib32
+@copy /Y src\pdblib.h %PROGRAMS%\local\include
+@copy /Y bin\libpdbLib.a %PROGRAMS%\local\lib32
