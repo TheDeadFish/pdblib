@@ -111,10 +111,9 @@ bool dbi_parse(PdbFile& pdb, DbiIndex& index, xarray<byte> file)
 	//Section Contribution
 	auto conLst = dbi->conInfo(modLst.data);
 	for(;conLst.chk(); conLst.fi()) {
-		pdb.contrib.push_back(
-			conLst->ModuleIndex, conLst->Section, 
-			conLst->Offset, conLst->Size, 
-			conLst->Characteristics);
+		pdb.modules[conLst->ModuleIndex].con.push_back(
+			conLst->Section-1, conLst->Offset, 
+			conLst->Size, conLst->Characteristics);
 	}
 	
 	// unsupported stuff

@@ -31,6 +31,7 @@ struct Pdb_Contrib
 struct Pdb_Module
 {
 	xstr name1, name2;
+	xArray<Pdb_Contrib> con;
 };
 
 // pdb data query
@@ -47,7 +48,6 @@ struct PdbFile
 	xArray<Pdb_Symb> symb;
 	
 	xArray<Pdb_Module> modules;
-	xArray<Pdb_Contrib> contrib;
 	
 	
 	Pdb_Symb* symb_get(cch* name) {
