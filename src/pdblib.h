@@ -1,4 +1,5 @@
 #pragma once
+struct PdbFile;
 
 struct Pdb_OMAP {
 	DWORD from, to; };
@@ -15,17 +16,25 @@ struct Pdb_Symb {
 	
 	DWORD src_rva(xarray<Pdb_Sect>& srcSect) {
 		return srcSect[iSect].addr + offset; }
+	DWORD rva(PdbFile& pdb);
+	DWORD map_rva(PdbFile& pdb);
 };
 
 
 
 struct Pdb_Contrib
 {
-	uint16_t ModuleIndex;
-	uint16_t Section;
+	int32_t Section;
 	int32_t Offset;
 	int32_t Size;
 	uint32_t Characteristics;
+	
+	DWORD src_rva(xarray<Pdb_Sect>& srcSect) {
+		return srcSect[Section].addr + Offset; }
+	DWORD rva(PdbFile& pdb);
+	DWORD map_rva(PdbFile& pdb);
+	
+	cch* get_name(PdbFile& pdb);
 };
 
 struct Pdb_Module
@@ -36,7 +45,6 @@ struct Pdb_Module
 
 // pdb data query
 u32 pdb_omap_get(xarray<Pdb_OMAP>& xa, u32 rva);
-Pdb_Symb* pdb_symb_get(xarray<Pdb_Symb>& xa, cch* name);
 
 struct PdbFile
 {
@@ -49,18 +57,20 @@ struct PdbFile
 	
 	xArray<Pdb_Module> modules;
 	
+	// symbol functions
+	Pdb_Symb* name_get_symb(cch* name);
+	int name_get_rva(cch* name, bool map=0);
+	Pdb_Symb* rva_get_symb(int rva, bool map=0);
+	cch* rva_get_name(int rva, bool map=0);
 	
-	Pdb_Symb* symb_get(cch* name) {
-		return pdb_symb_get(symb, name); }
-	int symb_get_rva(cch* name, bool org=0);
-	int symb_get_rva(Pdb_Symb* symb, bool org=0);
-	
-	
-	
-	
+	// rva helpers
+	int rva_from_src(int rva) { return pdb_omap_get(fromSrc, rva); }
+	int rva_to_src(int rva) { return pdb_omap_get(toSrc, rva); }
 	
 	int load(cch* name);
 };
 
-
-
+inline DWORD Pdb_Symb::rva(PdbFile& pdb) { return src_rva(pdb.orgSects); }
+inline DWORD Pdb_Symb::map_rva(PdbFile& pdb) { return pdb.rva_from_src(rva(pdb)); }
+inline DWORD Pdb_Contrib::rva(PdbFile& pdb) { return src_rva(pdb.orgSects); }
+inline DWORD Pdb_Contrib::map_rva(PdbFile& pdb) { return pdb.rva_from_src(rva(pdb)); }

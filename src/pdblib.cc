@@ -10,22 +10,42 @@ u32 pdb_omap_get(xarray<Pdb_OMAP>& xa, u32 rva)
 	return rva-cm.from+cm.to;
 }
 
-Pdb_Symb* pdb_symb_get(xarray<Pdb_Symb>& xa, cch* name)
+Pdb_Symb* PdbFile::name_get_symb(cch* name)
 {
-	for(auto& x : xa) {
+	for(auto& x : symb) {
 		if(!strcmp(x.name, name)) return &x; }
 	return NULL;
 }
 
-int PdbFile::symb_get_rva(cch* name, bool org)
+int PdbFile::name_get_rva(cch* name, bool map)
 {
-	return symb_get_rva(symb_get(name));
+	auto* symb = name_get_symb(name);
+	if(!symb) return 0;
+	int rva = symb->rva(*this);
+	if(map) rva = rva_from_src(rva);
+	return rva;
 }
 
-int PdbFile::symb_get_rva(Pdb_Symb* symb, bool org)
+Pdb_Symb* PdbFile::rva_get_symb(int rva, bool map)
 {
-	if(!symb) return -1;
-	DWORD rva = symb->src_rva(orgSects);
-	if(!org) rva = pdb_omap_get(fromSrc, rva);
-	return rva;
+	if(map) rva = rva_to_src(rva);
+	if(rva) {
+		for(auto& x : symb) {
+			if(x.rva(*this) == rva)
+				return &x;
+	}}
+
+	return NULL;		
+}
+
+cch* PdbFile::rva_get_name(int rva, bool map)
+{
+	auto* symb = rva_get_symb(rva, map);
+	if(!symb) return NULL;	
+	return symb->name;
+}
+
+cch* Pdb_Contrib::get_name(PdbFile& pdb)
+{
+	return pdb.rva_get_name(rva(pdb));
 }
