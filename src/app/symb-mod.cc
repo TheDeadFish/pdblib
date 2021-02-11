@@ -7,7 +7,7 @@ int main(int argc, char** argv)
 	// load the pdb file
 	PdbFile pdb;
 	int ec = pdb.load(argv[1]);
-	if(ec) { printf("%d\n", ec); return 0; }
+	if(ec) { printf("%X\n", ec); return 0; }
 
 	pdb.sortSymbByRva();
 

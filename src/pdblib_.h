@@ -21,4 +21,6 @@ struct DbiIndex
 bool dbi_parse(PdbFile& pdb, DbiIndex& index,
 	xarray<byte> file);
 	
+void dbi_print(DbiIndex& index);
+
 bool pdb_symb_parse(PdbFile& pdb, xarray<byte> file);

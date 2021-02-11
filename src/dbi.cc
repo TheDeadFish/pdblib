@@ -133,3 +133,23 @@ bool dbi_parse(PdbFile& pdb, DbiIndex& index, xarray<byte> file)
 	
 	return true;
 }
+
+
+#define X(name) \
+   printf(#name": %d\n", index.name);
+
+
+void dbi_print(DbiIndex& index)
+{
+	X(FPO) X(Exception)	X(Fixup)
+	X(Omap_To_Source)	X(Omap_From_Source)
+	X(Section_Header)	X(Token_RID_Map)
+	X(Xdata) X(Pdata) X(New_FPO)
+	X(Org_Section_Header)
+	
+	// dbi header indexes
+	X(GlobalStreamIndex)
+	X(PublicStreamIndex)
+	X(SymRecordStream)
+	X(MFCTypeServerIndex)
+}
