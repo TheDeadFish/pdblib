@@ -49,3 +49,23 @@ cch* Pdb_Contrib::get_name(PdbFile& pdb)
 {
 	return pdb.rva_get_name(rva(pdb));
 }
+
+static
+int symbSortRvaFn(const Pdb_Symb a, const Pdb_Symb& b) {
+	IFRET(a.iSect-b.iSect); return a.offset-b.offset;
+}
+
+void PdbFile::sortSymbByRva()
+{
+	qsort(symb, symbSortRvaFn);
+}
+
+
+xarray<Pdb_Symb> PdbFile::rva_get_symb(
+	Pdb_SectOfs sectOfs, int32_t size)
+{
+	auto* beg = bsearch_lower(&sectOfs, symb, symbSortRvaFn);
+	sectOfs.offset += size;
+	auto* end = bsearch_lower(&sectOfs, symb, symbSortRvaFn);
+	return {beg, end};
+}

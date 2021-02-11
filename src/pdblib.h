@@ -9,9 +9,11 @@ struct Pdb_Sect {
 	char name[8];
 };
 
+struct Pdb_SectOfs {
+	DWORD iSect, offset; };
 
-struct Pdb_Symb {
-	DWORD iSect, offset;
+struct Pdb_Symb : Pdb_SectOfs
+{
 	DWORD flags; xstr name;
 	
 	DWORD src_rva(xarray<Pdb_Sect>& srcSect) {
@@ -63,9 +65,20 @@ struct PdbFile
 	Pdb_Symb* rva_get_symb(int rva, bool map=0);
 	cch* rva_get_name(int rva, bool map=0);
 	
+	//xarray<Pdb_Symb> rva_get_symb(int rva, int size, bool map=0);
+	xarray<Pdb_Symb> rva_get_symb(Pdb_SectOfs sectOfs, int32_t size);
+	
 	// rva helpers
 	int rva_from_src(int rva) { return pdb_omap_get(fromSrc, rva); }
 	int rva_to_src(int rva) { return pdb_omap_get(toSrc, rva); }
+	
+	
+	// sorting functions
+	void sortSymbByRva();
+	
+	
+	
+	
 	
 	int load(cch* name);
 };
