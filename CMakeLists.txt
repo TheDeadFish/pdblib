@@ -11,3 +11,4 @@ add_library(pdbLib src/msf.cc src/dbi.cc src/symb.cc
 link_libraries(pdbLib -lstdshit)
 add_executable(test src/test.cc)
 add_executable(symb-mod src/app/symb-mod.cc)
+add_executable(msf-dump src/app/msf-dump.cc)
