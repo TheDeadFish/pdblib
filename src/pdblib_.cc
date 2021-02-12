@@ -52,15 +52,18 @@ int PdbFile::load(cch* name)
 	}
 	
 	// adress mapping
-	if(!pdb_omap_load(toSrc, msf, index.Omap_To_Source))
+	if((index.Omap_To_Source != 0xFFFF)
+	&&(!pdb_omap_load(toSrc, msf, index.Omap_To_Source)))
 		return ERRDEF(4, index.Omap_To_Source);
-	if(!pdb_omap_load(fromSrc, msf, index.Omap_From_Source))
+	if((index.Omap_From_Source != 0xFFFF)		
+	&&(!pdb_omap_load(fromSrc, msf, index.Omap_From_Source)))
 		return ERRDEF(5, index.Omap_From_Source);
 		
 	// sections
 	if(!pdb_sect_load(peSects, msf, index.Section_Header))
 		return ERRDEF(6, index.Section_Header);
-	if(!pdb_sect_load(orgSects, msf, index.Org_Section_Header))
+	if((index.Org_Section_Header != 0xFFFF)
+	&&(!pdb_sect_load(orgSects, msf, index.Org_Section_Header)))
 		return ERRDEF(7, index.Org_Section_Header);
 
 	return 0;

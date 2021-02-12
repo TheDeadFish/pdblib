@@ -3,6 +3,9 @@
 
 u32 pdb_omap_get(xarray<Pdb_OMAP>& xa, u32 rva)
 {
+	if(xa.len == 0) 
+		return rva;
+
 	Pdb_OMAP cm = {0,0};
 	for(auto& x : xa) {
 		if(x.from > rva) break; cm = x; } 
