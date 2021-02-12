@@ -1,18 +1,6 @@
 #include <stdshit.h>
 #include "pdblib_.h"
-
-struct RecordHeader {
-  uint16_t RecordLen;  // Record length, not including this 2 byte field.
-  uint16_t RecordKind; // Record kind enum.
-};
-
-struct PublicSymb {
-	RecordHeader rec;
-	uint32_t flags;
-	uint32_t offset;
-	uint16_t section;
-	char name[];
-};
+#include "cvinfo.h"
 
 bool pdb_symb_parse(PdbFile& pdb, xarray<byte> file)
 {
@@ -20,21 +8,21 @@ bool pdb_symb_parse(PdbFile& pdb, xarray<byte> file)
 	while(pos.chk()) {
 	
 		// validate the record
-		RecordHeader* rec = Void(pos.data);
-		int len = rec->RecordLen+2;
+		SYMTYPE* rec = Void(pos.data);
+		int len = rec->reclen+2;
 		if((len < 4)||(pos.count() < len))
 			return false;
 			
-		if(rec->RecordKind == 0x110E) {
+		if(rec->rectyp == S_PUB32) {
 			// validate the symbol
-			PublicSymb* symb = Void(rec);
+			PUBSYM32* symb = Void(rec);
 			char* name = ovfStrChk_(pos.data+len, symb->name);
 			if(!name) return false;
 			
 			// insert the symbol
 			pdb.symb.push_back(
-				symb->section-1, symb->offset,
-				symb->flags, xstrdup(name));
+				symb->seg-1, symb->off,
+				symb->pubsymflags.grfFlags, xstrdup(name));
 		}
 		
 		pos.data += len;
