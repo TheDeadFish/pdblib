@@ -9,7 +9,7 @@ include_directories(include)
 add_library(pdbLib src/msf.cc src/dbi.cc src/symb.cc 
 	src/pdblib_.cc src/pdblib.cc)
 
-link_libraries(pdbLib -lstdshit)
+link_libraries(pdbLib -lexshit -lstdshit)
 add_executable(test src/test.cc)
 add_executable(symb-mod src/app/symb-mod.cc)
 add_executable(msf-dump src/app/msf-dump.cc)
