@@ -1500,7 +1500,7 @@ typedef struct lfPointer_16t : public lfPointerBody_16t {
         unsigned char       Sym[1];     // copy of base symbol record (including length)
         struct  {
             CV_typ16_t      index;      // type index if CV_PTR_BASE_TYPE
-            unsigned char   name[1];    // name of base type
+            unsigned char   name[CV_ZEROLEN];    // name of base type
         } btype;
     } pbase;
 } lfPointer_16t;
@@ -1542,7 +1542,7 @@ typedef struct lfPointer : public lfPointerBody {
         unsigned char       Sym[1];     // copy of base symbol record (including length)
         struct  {
             CV_typ_t        index;      // type index if CV_PTR_BASE_TYPE
-            unsigned char   name[1];    // name of base type
+            unsigned char   name[CV_ZEROLEN];    // name of base type
         } btype;
     } pbase;
 } lfPointer;
@@ -1669,7 +1669,7 @@ typedef struct lfUnion {
 typedef struct lfAlias {
     unsigned short  leaf;           // LF_ALIAS
     CV_typ_t        utype;          // underlying type
-    unsigned char   Name[1];        // alias name
+    unsigned char   name[CV_ZEROLEN];        // alias name
 } lfAlias;
 
 // Item Id is a stricter typeindex which may referenced from symbol stream.
@@ -1733,7 +1733,7 @@ typedef struct lfBuildInfo {
 
 typedef struct lfManaged {
     unsigned short  leaf;           // LF_MANAGED
-    unsigned char   Name[1];        // utf8, zero terminated managed type name
+    unsigned char   name[CV_ZEROLEN];        // utf8, zero terminated managed type name
 } lfManaged;
 
 
@@ -1746,7 +1746,7 @@ typedef struct lfEnum_16t {
     CV_typ16_t      utype;          // underlying type of the enum
     CV_typ16_t      field;          // type index of LF_FIELD descriptor list
     CV_prop_t       property;       // property attribute field
-    unsigned char   Name[1];        // length prefixed name of enum
+    unsigned char   name[CV_ZEROLEN];        // length prefixed name of enum
 } lfEnum_16t;
 
 typedef struct lfEnum {
@@ -1755,7 +1755,7 @@ typedef struct lfEnum {
     CV_prop_t       property;       // property attribute field
     CV_typ_t        utype;          // underlying type of the enum
     CV_typ_t        field;          // type index of LF_FIELD descriptor list
-    unsigned char   Name[1];        // length prefixed name of enum
+    unsigned char   name[CV_ZEROLEN];        // length prefixed name of enum
 } lfEnum;
 
 
@@ -1895,14 +1895,14 @@ typedef struct lfDimArray_16t {
     unsigned short  leaf;       // LF_DIMARRAY_16t
     CV_typ16_t      utype;      // underlying type of the array
     CV_typ16_t      diminfo;    // dimension information
-    unsigned char   name[1];    // length prefixed name
+    unsigned char   name[CV_ZEROLEN];    // length prefixed name
 } lfDimArray_16t;
 
 typedef struct lfDimArray {
     unsigned short  leaf;       // LF_DIMARRAY
     CV_typ_t        utype;      // underlying type of the array
     CV_typ_t        diminfo;    // dimension information
-    unsigned char   name[1];    // length prefixed name
+    unsigned char   name[CV_ZEROLEN];    // length prefixed name
 } lfDimArray;
 
 
@@ -2555,14 +2555,14 @@ typedef struct lfFriendCls {
 typedef struct lfFriendFcn_16t {
     unsigned short  leaf;           // LF_FRIENDFCN_16t
     CV_typ16_t      index;          // index to type record of friend function
-    unsigned char   Name[1];        // name of friend function
+    unsigned char   name[CV_ZEROLEN];        // name of friend function
 } lfFriendFcn_16t;
 
 typedef struct lfFriendFcn {
     unsigned short  leaf;           // LF_FRIENDFCN
     _2BYTEPAD       pad0;           // internal padding, must be 0
     CV_typ_t        index;          // index to type record of friend function
-    unsigned char   Name[1];        // name of friend function
+    unsigned char   name[CV_ZEROLEN];        // name of friend function
 } lfFriendFcn;
 
 
@@ -2593,14 +2593,14 @@ typedef struct lfSTMember_16t {
     unsigned short  leaf;           // LF_STMEMBER_16t
     CV_typ16_t      index;          // index of type record for field
     CV_fldattr_t    attr;           // attribute mask
-    unsigned char   Name[1];        // length prefixed name of field
+    unsigned char   name[CV_ZEROLEN];        // length prefixed name of field
 } lfSTMember_16t;
 
 typedef struct lfSTMember {
     unsigned short  leaf;           // LF_STMEMBER
     CV_fldattr_t    attr;           // attribute mask
     CV_typ_t        index;          // index of type record for field
-    unsigned char   Name[1];        // length prefixed name of field
+    unsigned char   name[CV_ZEROLEN];        // length prefixed name of field
 } lfSTMember;
 
 
@@ -2644,14 +2644,14 @@ typedef struct lfMethod_16t {
     unsigned short  leaf;           // LF_METHOD_16t
     unsigned short  count;          // number of occurrences of function
     CV_typ16_t      mList;          // index to LF_METHODLIST record
-    unsigned char   Name[1];        // length prefixed name of method
+    unsigned char   name[CV_ZEROLEN];        // length prefixed name of method
 } lfMethod_16t;
 
 typedef struct lfMethod {
     unsigned short  leaf;           // LF_METHOD
     unsigned short  count;          // number of occurrences of function
     CV_typ_t        mList;          // index to LF_METHODLIST record
-    unsigned char   Name[1];        // length prefixed name of method
+    unsigned char   name[CV_ZEROLEN];        // length prefixed name of method
 } lfMethod;
 
 
@@ -2693,14 +2693,14 @@ typedef struct lfEnumerate {
 typedef struct lfNestType_16t {
     unsigned short  leaf;       // LF_NESTTYPE_16t
     CV_typ16_t      index;      // index of nested type definition
-    unsigned char   Name[1];    // length prefixed type name
+    unsigned char   name[CV_ZEROLEN];    // length prefixed type name
 } lfNestType_16t;
 
 typedef struct lfNestType {
     unsigned short  leaf;       // LF_NESTTYPE
     _2BYTEPAD       pad0;       // internal padding, must be 0
     CV_typ_t        index;      // index of nested type definition
-    unsigned char   Name[1];    // length prefixed type name
+    unsigned char   name[CV_ZEROLEN];    // length prefixed type name
 } lfNestType;
 
 //  type record for nested (scoped) type definition, with attributes
@@ -2710,7 +2710,7 @@ typedef struct lfNestTypeEx {
     unsigned short  leaf;       // LF_NESTTYPEEX
     CV_fldattr_t    attr;       // member access
     CV_typ_t        index;      // index of nested type definition
-    unsigned char   Name[1];    // length prefixed type name
+    unsigned char   name[CV_ZEROLEN];    // length prefixed type name
 } lfNestTypeEx;
 
 //  type record for modifications to members
@@ -2719,7 +2719,7 @@ typedef struct lfMemberModify {
     unsigned short  leaf;       // LF_MEMBERMODIFY
     CV_fldattr_t    attr;       // the new attributes
     CV_typ_t        index;      // index of base class type definition
-    unsigned char   Name[1];    // length prefixed member name
+    unsigned char   name[CV_ZEROLEN];    // length prefixed member name
 } lfMemberModify;
 
 //  type record for pad leaf
@@ -3172,7 +3172,7 @@ typedef struct REGSYM_16t {
     unsigned short  rectyp;     // S_REGISTER_16t
     CV_typ16_t      typind;     // Type index
     unsigned short  reg;        // register enumerate
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } REGSYM_16t;
 
 typedef struct REGSYM {
@@ -3180,7 +3180,7 @@ typedef struct REGSYM {
     unsigned short  rectyp;     // S_REGISTER
     CV_typ_t        typind;     // Type index or Metadata token
     unsigned short  reg;        // register enumerate
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } REGSYM;
 
 typedef struct ATTRREGSYM {
@@ -3189,7 +3189,7 @@ typedef struct ATTRREGSYM {
     CV_typ_t        typind;     // Type index or Metadata token
     CV_lvar_attr    attr;       // local var attributes
     unsigned short  reg;        // register enumerate
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } ATTRREGSYM;
 
 typedef struct MANYREGSYM_16t {
@@ -3267,7 +3267,7 @@ typedef struct UDTSYM_16t {
     unsigned short  reclen;     // Record length
     unsigned short  rectyp;     // S_UDT_16t | S_COBOLUDT_16t
     CV_typ16_t      typind;     // Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } UDTSYM_16t;
 
 
@@ -3275,7 +3275,7 @@ typedef struct UDTSYM {
     unsigned short  reclen;     // Record length
     unsigned short  rectyp;     // S_UDT | S_COBOLUDT
     CV_typ_t        typind;     // Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } UDTSYM;
 
 typedef struct MANTYPREF {
@@ -3383,7 +3383,7 @@ typedef struct OBJNAMESYM {
     unsigned short  reclen;     // Record length
     unsigned short  rectyp;     // S_OBJNAME
     unsigned long   signature;  // signature
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } OBJNAMESYM;
 
 
@@ -3417,7 +3417,7 @@ typedef struct BPRELSYM16 {
     unsigned short  rectyp;     // S_BPREL16
     CV_off16_t      off;        // BP-relative offset
     CV_typ16_t      typind;     // Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } BPRELSYM16;
 
 
@@ -3427,7 +3427,7 @@ typedef struct DATASYM16 {
     CV_uoff16_t     off;        // offset of symbol
     unsigned short  seg;        // segment of symbol
     CV_typ16_t      typind;     // Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } DATASYM16;
 typedef DATASYM16 PUBSYM16;
 
@@ -3445,7 +3445,7 @@ typedef struct PROCSYM16 {
     unsigned short  seg;        // segment of symbol
     CV_typ16_t      typind;     // Type index
     CV_PROCFLAGS    flags;      // Proc flags
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } PROCSYM16;
 
 
@@ -3459,8 +3459,8 @@ typedef struct THUNKSYM16 {
     unsigned short  seg;        // segment of symbol
     unsigned short  len;        // length of thunk
     unsigned char   ord;        // THUNK_ORDINAL specifying type of thunk
-    unsigned char   name[1];    // name of thunk
-    unsigned char   variant[CV_ZEROLEN]; // variant portion of thunk
+    //unsigned char   name[CV_ZEROLEN];    // name of thunk
+    //unsigned char   variant[CV_ZEROLEN]; // variant portion of thunk
 } THUNKSYM16;
 
 typedef struct LABELSYM16 {
@@ -3469,7 +3469,7 @@ typedef struct LABELSYM16 {
     CV_uoff16_t     off;        // offset of symbol
     unsigned short  seg;        // segment of symbol
     CV_PROCFLAGS    flags;      // flags
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } LABELSYM16;
 
 
@@ -3481,7 +3481,7 @@ typedef struct BLOCKSYM16 {
     unsigned short  len;        // Block length
     CV_uoff16_t     off;        // offset of symbol
     unsigned short  seg;        // segment of symbol
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } BLOCKSYM16;
 
 
@@ -3558,7 +3558,7 @@ typedef struct REGREL16 {
     CV_uoff16_t     off;        // offset of symbol
     unsigned short  reg;        // register index
     CV_typ16_t      typind;     // Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } REGREL16;
 
 
@@ -3567,7 +3567,7 @@ typedef struct BPRELSYM32_16t {
     unsigned short  rectyp;     // S_BPREL32_16t
     CV_off32_t      off;        // BP-relative offset
     CV_typ16_t      typind;     // Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } BPRELSYM32_16t;
 
 typedef struct BPRELSYM32 {
@@ -3575,7 +3575,7 @@ typedef struct BPRELSYM32 {
     unsigned short  rectyp;     // S_BPREL32
     CV_off32_t      off;        // BP-relative offset
     CV_typ_t        typind;     // Type index or Metadata token
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } BPRELSYM32;
 
 typedef struct FRAMERELSYM {
@@ -3584,7 +3584,7 @@ typedef struct FRAMERELSYM {
     CV_off32_t      off;        // Frame relative offset
     CV_typ_t        typind;     // Type index or Metadata token
     CV_lvar_attr    attr;       // local var attributes
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } FRAMERELSYM;
 
 typedef FRAMERELSYM ATTRFRAMERELSYM;
@@ -3595,7 +3595,7 @@ typedef struct SLOTSYM32 {
     unsigned short  rectyp;     // S_LOCALSLOT or S_PARAMSLOT
     unsigned long   iSlot;      // slot index
     CV_typ_t        typind;     // Type index or Metadata token
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } SLOTSYM32;
 
 typedef struct ATTRSLOTSYM {
@@ -3604,7 +3604,7 @@ typedef struct ATTRSLOTSYM {
     unsigned long   iSlot;      // slot index
     CV_typ_t        typind;     // Type index or Metadata token
     CV_lvar_attr    attr;       // local var attributes
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } ATTRSLOTSYM;
 
 typedef struct ANNOTATIONSYM {
@@ -3622,7 +3622,7 @@ typedef struct DATASYM32_16t {
     CV_uoff32_t     off;
     unsigned short  seg;
     CV_typ16_t      typind;     // Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } DATASYM32_16t;
 typedef DATASYM32_16t PUBSYM32_16t;
 
@@ -3632,7 +3632,7 @@ typedef struct DATASYM32 {
     CV_typ_t        typind;     // Type index, or Metadata token if a managed symbol
     CV_uoff32_t     off;
     unsigned short  seg;
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } DATASYM32;
 
 typedef struct DATASYMHLSL {
@@ -3645,7 +3645,7 @@ typedef struct DATASYMHLSL {
     unsigned short  texslot;    // Texture slot start
     unsigned short  sampslot;   // Sampler slot start
     unsigned short  uavslot;    // UAV slot start
-    unsigned char   name[1];    // name
+    unsigned char   name[CV_ZEROLEN];    // name
 } DATASYMHLSL;
 
 typedef struct DATASYMHLSL32 {
@@ -3658,7 +3658,7 @@ typedef struct DATASYMHLSL32 {
     unsigned long   sampslot;   // Sampler slot start
     unsigned long   uavslot;    // UAV slot start
     unsigned short  regType;    // register type from CV_HLSLREG_e
-    unsigned char   name[1];    // name
+    unsigned char   name[CV_ZEROLEN];    // name
 } DATASYMHLSL32;
 
 typedef struct DATASYMHLSL32_EX {
@@ -3670,7 +3670,7 @@ typedef struct DATASYMHLSL32_EX {
     unsigned long   bindSpace;  // Binding space
     unsigned long   bindSlot;   // Lower bound in binding space
     unsigned short  regType;    // register type from CV_HLSLREG_e
-    unsigned char   name[1];    // name
+    unsigned char   name[CV_ZEROLEN];    // name
 } DATASYMHLSL32_EX;
 
 typedef enum CV_PUBSYMFLAGS_e
@@ -3699,7 +3699,7 @@ typedef struct PUBSYM32 {
     CV_PUBSYMFLAGS  pubsymflags;
     CV_uoff32_t     off;
     unsigned short  seg;
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } PUBSYM32;
 
 
@@ -3716,7 +3716,7 @@ typedef struct PROCSYM32_16t {
     unsigned short  seg;
     CV_typ16_t      typind;     // Type index
     CV_PROCFLAGS    flags;      // Proc flags
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } PROCSYM32_16t;
 
 typedef struct PROCSYM32 {
@@ -3732,7 +3732,7 @@ typedef struct PROCSYM32 {
     CV_uoff32_t     off;
     unsigned short  seg;
     CV_PROCFLAGS    flags;      // Proc flags
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } PROCSYM32;
 
 typedef struct MANPROCSYM {
@@ -3749,7 +3749,7 @@ typedef struct MANPROCSYM {
     unsigned short  seg;
     CV_PROCFLAGS    flags;      // Proc flags
     unsigned short  retReg;     // Register return value is in (may not be used for all archs)
-    unsigned char   name[1];    // optional name field
+    unsigned char   name[CV_ZEROLEN];    // optional name field
 } MANPROCSYM;
 
 typedef struct MANPROCSYMMIPS {
@@ -3770,7 +3770,7 @@ typedef struct MANPROCSYMMIPS {
     unsigned short  seg;
     unsigned char   retReg;     // Register return value is in
     unsigned char   frameReg;   // Frame pointer register
-    unsigned char   name[1];    // optional name field
+    unsigned char   name[CV_ZEROLEN];    // optional name field
 } MANPROCSYMMIPS;
 
 typedef struct THUNKSYM32 {
@@ -3783,8 +3783,8 @@ typedef struct THUNKSYM32 {
     unsigned short  seg;
     unsigned short  len;        // length of thunk
     unsigned char   ord;        // THUNK_ORDINAL specifying type of thunk
-    unsigned char   name[1];    // Length-prefixed name
-    unsigned char   variant[CV_ZEROLEN]; // variant portion of thunk
+    //unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
+    //unsigned char   variant[CV_ZEROLEN]; // variant portion of thunk
 } THUNKSYM32;
 
 typedef enum TRAMP_e {      // Trampoline subtype
@@ -3809,7 +3809,7 @@ typedef struct LABELSYM32 {
     CV_uoff32_t     off;
     unsigned short  seg;
     CV_PROCFLAGS    flags;      // flags
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } LABELSYM32;
 
 
@@ -3821,7 +3821,7 @@ typedef struct BLOCKSYM32 {
     unsigned long   len;        // Block length
     CV_uoff32_t     off;        // Offset in code segment
     unsigned short  seg;        // segment of label
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } BLOCKSYM32;
 
 
@@ -3890,7 +3890,7 @@ typedef struct REGREL32_16t {
     CV_uoff32_t     off;        // offset of symbol
     unsigned short  reg;        // register index for symbol
     CV_typ16_t      typind;     // Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } REGREL32_16t;
 
 typedef struct REGREL32 {
@@ -3899,7 +3899,7 @@ typedef struct REGREL32 {
     CV_uoff32_t     off;        // offset of symbol
     CV_typ_t        typind;     // Type index or metadata token
     unsigned short  reg;        // register index for symbol
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } REGREL32;
 
 typedef struct ATTRREGREL {
@@ -3909,7 +3909,7 @@ typedef struct ATTRREGREL {
     CV_typ_t        typind;     // Type index or metadata token
     unsigned short  reg;        // register index for symbol
     CV_lvar_attr    attr;       // local var attributes
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } ATTRREGREL;
 
 typedef ATTRREGREL  ATTRREGRELSYM;
@@ -3920,7 +3920,7 @@ typedef struct THREADSYM32_16t {
     CV_uoff32_t     off;        // offset into thread storage
     unsigned short  seg;        // segment of thread storage
     CV_typ16_t      typind;     // type index
-    unsigned char   name[1];    // length prefixed name
+    unsigned char   name[CV_ZEROLEN];    // length prefixed name
 } THREADSYM32_16t;
 
 typedef struct THREADSYM32 {
@@ -3929,7 +3929,7 @@ typedef struct THREADSYM32 {
     CV_typ_t        typind;     // type index
     CV_uoff32_t     off;        // offset into thread storage
     unsigned short  seg;        // segment of thread storage
-    unsigned char   name[1];    // length prefixed name
+    unsigned char   name[CV_ZEROLEN];    // length prefixed name
 } THREADSYM32;
 
 typedef struct SLINK32 {
@@ -3958,7 +3958,7 @@ typedef struct PROCSYMMIPS_16t {
     CV_typ16_t      typind;     // Type index
     unsigned char   retReg;     // Register return value is in
     unsigned char   frameReg;   // Frame pointer register
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } PROCSYMMIPS_16t;
 
 typedef struct PROCSYMMIPS {
@@ -3979,7 +3979,7 @@ typedef struct PROCSYMMIPS {
     unsigned short  seg;        // Symbol segment
     unsigned char   retReg;     // Register return value is in
     unsigned char   frameReg;   // Frame pointer register
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } PROCSYMMIPS;
 
 typedef struct PROCSYMIA64 {
@@ -3996,7 +3996,7 @@ typedef struct PROCSYMIA64 {
     unsigned short  seg;        // Symbol segment
     unsigned short  retReg;     // Register return value is in
     CV_PROCFLAGS    flags;      // Proc flags
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[CV_ZEROLEN];    // Length-prefixed name
 } PROCSYMIA64;
 
 typedef struct REFSYM {
@@ -4014,7 +4014,7 @@ typedef struct REFSYM2 {
     unsigned long   sumName;    // SUC of the name
     unsigned long   ibSym;      // Offset of actual symbol in $$Symbols
     unsigned short  imod;       // Module containing the actual symbol
-    unsigned char   name[1];    // hidden name made a first class member
+    unsigned char   name[CV_ZEROLEN];    // hidden name made a first class member
 } REFSYM2;
 
 typedef struct ALIGNSYM {
@@ -4142,7 +4142,7 @@ __inline unsigned short ExpandEncodedBasePointerReg(unsigned machineType, unsign
 typedef struct UNAMESPACE {
     unsigned short  reclen;     // Record length
     unsigned short  rectyp;     // S_UNAMESPACE
-    unsigned char   name[1];    // name
+    unsigned char   name[CV_ZEROLEN];    // name
 } UNAMESPACE;
 
 typedef struct SEPCODESYM {
@@ -4439,7 +4439,7 @@ typedef struct SECTIONSYM {
     unsigned long   rva;
     unsigned long   cb;
     unsigned long   characteristics;
-    unsigned char   name[1];            // name
+    unsigned char   name[CV_ZEROLEN];            // name
 } SECTIONSYM;
 
 typedef struct COFFGROUPSYM {
@@ -4450,7 +4450,7 @@ typedef struct COFFGROUPSYM {
     unsigned long   characteristics;
     CV_uoff32_t     off;                // Symbol offset
     unsigned short  seg;                // Symbol segment
-    unsigned char   name[1];            // name
+    unsigned char   name[CV_ZEROLEN];            // name
 } COFFGROUPSYM;
 
 typedef struct EXPORTSYM {
@@ -4465,7 +4465,7 @@ typedef struct EXPORTSYM {
     unsigned short  fOrdinal : 1;       // Ordinal was explicitly assigned
     unsigned short  fForwarder : 1;     // This is a forwarder
     unsigned short  reserved : 10;      // Reserved. Must be zero.
-    unsigned char   name[1];            // name of
+    unsigned char   name[CV_ZEROLEN];            // name of
 } EXPORTSYM;
 
 //
@@ -4559,7 +4559,7 @@ typedef struct REFMINIPDB {
     unsigned short  fLabel   :  1;      // reference to label
     unsigned short  fConst   :  1;      // reference to const
     unsigned short  reserved : 11;      // reserved, must be zero
-    unsigned char   name[1];            // zero terminated name string
+    unsigned char   name[CV_ZEROLEN];            // zero terminated name string
 } REFMINIPDB;
 
 typedef struct PDBMAP {
