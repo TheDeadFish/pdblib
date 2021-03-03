@@ -1,4 +1,7 @@
 #pragma once
+#include "msf.h"
+#include "dbi.h"
+
 struct PdbFile;
 
 struct Pdb_OMAP {
@@ -50,6 +53,10 @@ u32 pdb_omap_get(xarray<Pdb_OMAP>& xa, u32 rva);
 
 struct PdbFile
 {
+	MsfFile msf;
+	PdbLib::Dbi dbi;
+	
+
 	xArray<Pdb_Sect> orgSects;
 	xArray<Pdb_Sect> peSects;
 	

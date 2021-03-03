@@ -87,6 +87,10 @@ struct Dbi {
   DbiOptHdr optHdr;
   
   
+  DbiHdr* operator->() { return hdr; }
+  
+  
+  
   
 
 	

@@ -141,58 +141,12 @@ struct DbiStreamHeader {
 	
 };
 
-bool dbi_parse(PdbFile& pdb, DbiIndex& index, xarray<byte> file)
-{
-
-	PdbLib::Dbi x;
-	x.init(file, 100);
-	//exit(1);
-
-	DbiStreamHeader* dbi = Void(file.data);
-	if(!dbi->chk(file.len)) return false;
-	
-	// Module Info
-	auto modLst = dbi->modInfo();
-	while(modLst.chk()) {
-		auto chk = modLst->chk(modLst.end());
-		if(!chk) return false;
-		pdb.modules.push_back(
-			xstrdup(modLst->ModuleName),
-			xstrdup(chk.ObjFileName));
-		modLst.data = chk.next;
-	}
-	
-	//Section Contribution
-	auto conLst = dbi->conInfo(modLst.data);
-	for(;conLst.chk(); conLst.fi()) {
-		pdb.modules[conLst->ModuleIndex].con.push_back(
-			conLst->Section-1, conLst->Offset, 
-			conLst->Size, conLst->Characteristics);
-	}
-	
-	// unsupported stuff
-	char* pos = Void(conLst.data);
-	pos += dbi->SectionMapSize;
-	pos += dbi->SourceInfoSize;
-	pos += dbi->TypeServerMapSize;
-	pos += dbi->ECSubstreamSize;
-	
-	// stream indexes
-	memset(&index, 0, sizeof(DbiIndex));
-	index.GlobalStreamIndex = dbi->GlobalStreamIndex;
-	index.PublicStreamIndex = dbi->PublicStreamIndex;
-	index.SymRecordStream = dbi->SymRecordStream;
-	index.MFCTypeServerIndex = dbi->MFCTypeServerIndex;
-	memcpy(&index, pos, min(22,	dbi->OptionalDbgHeaderSize));
-	
-	return true;
-}
-
 
 #define X(name) \
    printf(#name": %d\n", index.name);
 
 
+/*
 void dbi_print(DbiIndex& index)
 {
 	X(FPO) X(Exception)	X(Fixup)
@@ -207,3 +161,4 @@ void dbi_print(DbiIndex& index)
 	X(SymRecordStream)
 	X(MFCTypeServerIndex)
 }
+*/

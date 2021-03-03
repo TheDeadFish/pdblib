@@ -39,32 +39,30 @@ int PdbFile::load(cch* name)
 	if(msf.len < 4) return 0x100|1;
 	
 	// parse dbi stream
-	DbiIndex index;
-	if(!dbi_parse(*this, index, msf[3]))
+	if(dbi.init(msf[3], msf.len))
 		return ERRDEF(2, 3);
-	//dbi_print(index);
 		
 	// parse symbols
-	if(index.SymRecordStream != 0xFFFF) {
-		if((!msf.chk(index.SymRecordStream))
-		||(!pdb_symb_parse(*this, msf[index.SymRecordStream])))
-			return ERRDEF(3, index.SymRecordStream);
+	if(dbi->SymRecordStream != 0xFFFF) {
+		if((!msf.chk(dbi->SymRecordStream))
+		||(!pdb_symb_parse(*this, msf[dbi->SymRecordStream])))
+			return ERRDEF(3, dbi->SymRecordStream);
 	}
 	
-	// adress mapping
-	if((index.Omap_To_Source != 0xFFFF)
-	&&(!pdb_omap_load(toSrc, msf, index.Omap_To_Source)))
-		return ERRDEF(4, index.Omap_To_Source);
-	if((index.Omap_From_Source != 0xFFFF)		
-	&&(!pdb_omap_load(fromSrc, msf, index.Omap_From_Source)))
-		return ERRDEF(5, index.Omap_From_Source);
+	// dbi.optHdr mapping
+	if((dbi.optHdr.Omap_To_Source != 0xFFFF)
+	&&(!pdb_omap_load(toSrc, msf, dbi.optHdr.Omap_To_Source)))
+		return ERRDEF(4, dbi.optHdr.Omap_To_Source);
+	if((dbi.optHdr.Omap_From_Source != 0xFFFF)		
+	&&(!pdb_omap_load(fromSrc, msf, dbi.optHdr.Omap_From_Source)))
+		return ERRDEF(5, dbi.optHdr.Omap_From_Source);
 		
 	// sections
-	if(!pdb_sect_load(peSects, msf, index.Section_Header))
-		return ERRDEF(6, index.Section_Header);
-	if((index.Org_Section_Header != 0xFFFF)
-	&&(!pdb_sect_load(orgSects, msf, index.Org_Section_Header)))
-		return ERRDEF(7, index.Org_Section_Header);
+	if(!pdb_sect_load(peSects, msf, dbi.optHdr.Section_Header))
+		return ERRDEF(6, dbi.optHdr.Section_Header);
+	if((dbi.optHdr.Org_Section_Header != 0xFFFF)
+	&&(!pdb_sect_load(orgSects, msf, dbi.optHdr.Org_Section_Header)))
+		return ERRDEF(7, dbi.optHdr.Org_Section_Header);
 
 	return 0;
 }
