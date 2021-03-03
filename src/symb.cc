@@ -10,7 +10,7 @@ u8 value_list[] = {
 	16, 16, 12, 8
 };
 
-
+# if 0
 static inline
 bool value_size(DataPos& dataPos) {
 	int value = dataPos.ref<s16>(-1);
@@ -22,6 +22,8 @@ bool value_size(DataPos& dataPos) {
 	}
 	return true;
 }
+
+#endif
 
 enum {
 	MODE_LPS = 1, // length prefixed string
@@ -62,6 +64,7 @@ SymbInfo* lookupSymb(SYMTYPE* rec) {
 
 bool pdb_symb_parse(PdbFile& pdb, xarray<byte> file)
 {
+#if 0
 	DataPos dataPos(file);
 	while(1) 
 	{
@@ -101,6 +104,6 @@ bool pdb_symb_parse(PdbFile& pdb, xarray<byte> file)
 	}
 	
 	exit(1);
-
+#endif
 	return true;
 }

@@ -1,5 +1,54 @@
 #include <stdshit.h>
 #include "pdblib_.h"
+#include "dbi.h"
+#include "dataPos.h"
+
+namespace PdbLib
+{
+
+int Dbi::init(xarray<byte> xa, int nFiles)
+{
+	// Dbi Header
+	DataPos dataPos(xa);
+	if(!dataPos.pGet<DbiHdr>(hdr))
+		return -1;
+
+	// Module Info
+	if(!dataPos._chkSetEnd(hdr->ModInfoSize))
+		return -2;
+	while(dataPos.chk()) {
+		auto& mi = modInfo.xnxalloc();
+		if(!dataPos.pGet(mi.hdr)) return -2;
+		if(!dataPos.pGetStr(mi.ModuleName)) return -2;
+		if(!dataPos.pGetStr(mi.ObjFileName)) return -2;
+		dataPos.align(4);
+	}
+
+	// Section Contribution
+	dataPos.setEnd(xa);
+	if(!dataPos.pGetXa(sectCont, hdr->SectionContributionSize))
+		return -3;
+
+	// skip unsuported
+	if(!dataPos.get(hdr->SectionMapSize)) return -4;
+	if(!dataPos.get(hdr->SourceInfoSize))  return -4;
+	if(!dataPos.get(hdr->TypeServerMapSize))  return -4;
+	if(!dataPos.get(hdr->ECSubstreamSize)) return -4;
+
+	// optional Debug Header
+	DbiOptHdr* _optHdr;
+	if(!dataPos._pGet(_optHdr, hdr->OptionalDbgHeaderSize))
+		return -5;
+	memncpy(&optHdr, _optHdr, sizeof(DbiOptHdr),
+		hdr->OptionalDbgHeaderSize, -1);
+
+	printf("%X\n", optHdr.FPO);
+
+	return 0;
+}
+
+}
+
 
   struct SectionContribEntry {
     uint16_t Section;
@@ -94,6 +143,11 @@ struct DbiStreamHeader {
 
 bool dbi_parse(PdbFile& pdb, DbiIndex& index, xarray<byte> file)
 {
+
+	PdbLib::Dbi x;
+	x.init(file, 100);
+	//exit(1);
+
 	DbiStreamHeader* dbi = Void(file.data);
 	if(!dbi->chk(file.len)) return false;
 	
