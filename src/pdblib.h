@@ -85,11 +85,6 @@ struct PdbFile;
 struct Pdb_OMAP {
 	DWORD from, to; };
 	
-struct Pdb_Sect {
-	DWORD addr, size, flags;
-	char name[8];
-};
-
 struct Pdb_SectOfs {
 	DWORD iSect, offset; };
 
@@ -97,8 +92,8 @@ struct Pdb_Symb : Pdb_SectOfs
 {
 	DWORD flags; xstr name;
 	
-	DWORD src_rva(xarray<Pdb_Sect>& srcSect) {
-		return srcSect[iSect].addr + offset; }
+	DWORD src_rva(xarray<IMAGE_SECTION_HEADER>& srcSect) {
+		return srcSect[iSect].VirtualAddress + offset; }
 	DWORD rva(PdbFile& pdb);
 	DWORD map_rva(PdbFile& pdb);
 };
@@ -112,8 +107,8 @@ struct Pdb_Contrib
 	int32_t Size;
 	uint32_t Characteristics;
 	
-	DWORD src_rva(xarray<Pdb_Sect>& srcSect) {
-		return srcSect[Section].addr + Offset; }
+	DWORD src_rva(xarray<IMAGE_SECTION_HEADER>& srcSect) {
+		return srcSect[Section].VirtualAddress + Offset; }
 	DWORD rva(PdbFile& pdb);
 	DWORD map_rva(PdbFile& pdb);
 	
@@ -148,11 +143,15 @@ struct PdbFile
 
 	
 
-	xArray<Pdb_Sect> orgSects;
-	xArray<Pdb_Sect> peSects;
+	xarray<IMAGE_SECTION_HEADER> orgSects;
+	xarray<IMAGE_SECTION_HEADER> peSects;
 	
-	xArray<Pdb_OMAP> fromSrc;
-	xArray<Pdb_OMAP> toSrc;
+	xarray<Pdb_OMAP> fromSrc;
+	xarray<Pdb_OMAP> toSrc;
+	
+	
+	
+	
 	xArray<Pdb_Symb> symb;
 	
 	xArray<Pdb_Module> modules;

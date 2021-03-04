@@ -85,85 +85,29 @@ struct DataPos
 
 
 
-
+  */
 
 
 
 	char* getL8Str() {
-		if(pos >= len) return NULL;
-		return get<char>(data[pos]+1);
+		if(pos >= _end) return NULL;
+		return get<char>(ref<u8>()+1);
 	}
 
 	char* getL16Str() {
-		if(pos >= (len-1)) return NULL;
+		if(pos >= (_end-1)) return NULL;
 		return get<char>(ref<u16>()+2);
 	}
 
 	// unchecked access
-	byte* _ptr(size_t ofs=0) { return data+pos+ofs; }
-	byte* _nptr(size_t size) { byte* tmp = data+pos; pos += size; return tmp; }
-
-
-
-
-
-	//template <class T=byte> T* _nptr(size_t size) {
-	//	T* tmp = (T*)(data+pos); pos += size; return tmp; }
-
-
-
-
-	// pointer reference
-
-	bool __pGet(void** p, size_t size) {
-		size_t newPos;
-		if(pos > SSIZE_MAX) __builtin_unreachable();
-		if((__builtin_add_overflow(pos, size, &newPos))
-		||(newPos > len)) return false;
-
-		*p = data+pos; pos = newPos;
-		return true;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		}
-
-
-
-
-
-
-
-
+	byte* _ptr(size_t ofs=0) { return (byte*)pos+ofs; }
+	byte* _nptr(size_t size) { byte* tmp = (byte*)pos; pos += size; return tmp; }
 
 	// special modes
-
-
-
-
 	template <class T=byte> T* ptr(size_t ofs=0) { return (T*)_ptr(ofs*sizeof(T)); }
 	template <class T=byte> T& ref(size_t ofs=0) { return *ptr<T>(ofs); }
+	
 
-
-
-
-	template <class T=byte> bool pGet(T*& p, size_t size = 1) {
-		return _pGet(p, size*sizeof(T)); }
-
-		*/
 
 	bool _chkSetEnd(size_t size) {
 		if(!_chk(size)) return false;

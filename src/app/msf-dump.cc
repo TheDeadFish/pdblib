@@ -9,7 +9,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 	
-	PdbLib::MsfFile msf;
+	MsfFile msf;
 	int result = msf.load(argv[1]);
 	if(result) {
 		printf("msf load failed: %d\n", result);

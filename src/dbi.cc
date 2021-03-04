@@ -18,13 +18,14 @@ int PdbFile::_dbi_init()
 	while(dataPos.chk()) {
 		auto& mi = modInfo.xnxalloc();
 		if(!dataPos.pGet(mi.hdr)) return -2;
-		if(!dataPos.pGetStr(mi.ModuleName)) return -2;
 		if(!dataPos.pGetStr(mi.ObjFileName)) return -2;
 		dataPos.align(4);
 	}
 
 	// Section Contribution
 	dataPos.setEnd(msf[3]);
+	printf("%X\n", dataPos.ref<int>());
+	
 	if(!dataPos.pGetXa(sectCont, dbiHdr->SectionContributionSize))
 		return -3;
 
