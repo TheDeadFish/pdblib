@@ -34,35 +34,34 @@ bool pdb_sect_load(xArray<Pdb_Sect>& sect, MsfFile& msf, u16 index)
 int PdbFile::load(cch* name)
 {
 	// load msf container
-	MsfFile msf;
 	IFRET(msf.load(name));
 	if(msf.len < 4) return 0x100|1;
 	
 	// parse dbi stream
-	if(dbi.init(msf[3], msf.len))
+	if(_dbi_init())
 		return ERRDEF(2, 3);
 		
 	// parse symbols
-	if(dbi->SymRecordStream != 0xFFFF) {
-		if((!msf.chk(dbi->SymRecordStream))
-		||(!pdb_symb_parse(*this, msf[dbi->SymRecordStream])))
-			return ERRDEF(3, dbi->SymRecordStream);
+	if(dbiHdr->SymRecordStream != 0xFFFF) {
+		if((!msf.chk(dbiHdr->SymRecordStream))
+		||(!pdb_symb_parse(*this, msf[dbiHdr->SymRecordStream])))
+			return ERRDEF(3, dbiHdr->SymRecordStream);
 	}
 	
-	// dbi.optHdr mapping
-	if((dbi.optHdr.Omap_To_Source != 0xFFFF)
-	&&(!pdb_omap_load(toSrc, msf, dbi.optHdr.Omap_To_Source)))
-		return ERRDEF(4, dbi.optHdr.Omap_To_Source);
-	if((dbi.optHdr.Omap_From_Source != 0xFFFF)		
-	&&(!pdb_omap_load(fromSrc, msf, dbi.optHdr.Omap_From_Source)))
-		return ERRDEF(5, dbi.optHdr.Omap_From_Source);
+	// dbiOptHdr mapping
+	if((dbiOptHdr.Omap_To_Source != 0xFFFF)
+	&&(!pdb_omap_load(toSrc, msf, dbiOptHdr.Omap_To_Source)))
+		return ERRDEF(4, dbiOptHdr.Omap_To_Source);
+	if((dbiOptHdr.Omap_From_Source != 0xFFFF)		
+	&&(!pdb_omap_load(fromSrc, msf, dbiOptHdr.Omap_From_Source)))
+		return ERRDEF(5, dbiOptHdr.Omap_From_Source);
 		
 	// sections
-	if(!pdb_sect_load(peSects, msf, dbi.optHdr.Section_Header))
-		return ERRDEF(6, dbi.optHdr.Section_Header);
-	if((dbi.optHdr.Org_Section_Header != 0xFFFF)
-	&&(!pdb_sect_load(orgSects, msf, dbi.optHdr.Org_Section_Header)))
-		return ERRDEF(7, dbi.optHdr.Org_Section_Header);
+	if(!pdb_sect_load(peSects, msf, dbiOptHdr.Section_Header))
+		return ERRDEF(6, dbiOptHdr.Section_Header);
+	if((dbiOptHdr.Org_Section_Header != 0xFFFF)
+	&&(!pdb_sect_load(orgSects, msf, dbiOptHdr.Org_Section_Header)))
+		return ERRDEF(7, dbiOptHdr.Org_Section_Header);
 
 	return 0;
 }
