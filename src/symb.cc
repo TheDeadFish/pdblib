@@ -2,6 +2,8 @@
 #include "pdblib_.h"
 #include "cvinfo.h"
 #include "dataPos.h"
+#include "dump.h"
+#define DEBUG_DUMP
 
 
 u8 value_list[] = {
@@ -10,7 +12,6 @@ u8 value_list[] = {
 	16, 16, 12, 8
 };
 
-# if 0
 static inline
 bool value_size(DataPos& dataPos) {
 	int value = dataPos.ref<s16>(-1);
@@ -22,8 +23,6 @@ bool value_size(DataPos& dataPos) {
 	}
 	return true;
 }
-
-#endif
 
 enum {
 	MODE_LPS = 1, // length prefixed string
@@ -64,16 +63,21 @@ SymbInfo* lookupSymb(SYMTYPE* rec) {
 
 bool pdb_symb_parse(PdbFile& pdb, xarray<byte> file)
 {
-#if 0
 	DataPos dataPos(file);
+#ifdef DEBUG_DUMP
+	PdbLib::dump_setBase(dataPos.ptr());
+#endif
+
 	while(1) 
 	{
 		/* get record */
 		dataPos.align(4);
 		if(!dataPos.chk()) break;
 		SYMTYPE* rec = dataPos.get<SYMTYPE>();
-		
-		
+#ifdef DEBUG_DUMP
+		PdbLib::dump_symbol(rec);
+#endif
+
 		auto* symb = lookupSymb(rec);
 		if(symb) {
 		
@@ -104,6 +108,5 @@ bool pdb_symb_parse(PdbFile& pdb, xarray<byte> file)
 	}
 	
 	exit(1);
-#endif
 	return true;
 }

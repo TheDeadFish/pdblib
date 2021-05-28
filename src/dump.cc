@@ -1,5 +1,7 @@
 #include <stdshit.h>
 #include "pdblib.h"
+#include "cvinfo.h"
+
 namespace PdbLib {
 
 static int indent;
@@ -15,6 +17,7 @@ enum {
 	TYPE_u32,
 	TYPE_u16,
 	TYPE_str,
+	TYPE_lps,
 };
 
 static
@@ -42,6 +45,10 @@ void* print_field(Field* field, void* data)
 	if(field->type == TYPE_str) {
 		sData = strlen((char*)data)+1;
 		len = printf("%s: %s", field->name, (char*)data);
+
+	} ei(field->type == TYPE_lps) {
+		sData = RB(data); data += 1;
+		len = printf("%s: %.*s", field->name, sData, (char*)data);
 
 	} else {
 
@@ -143,6 +150,39 @@ static Field modInfo[] = {
 	FIELD(str, ObjFileName) {}
 };
 
+static Field constSym[] = {
+	FIELD(u32, typind)
+	FIELD(u16, value)
+	FIELD(lps, name) {}
+};
+
+static Field udt[] = {
+	FIELD(u32, typind)
+	FIELD(lps, name) {}
+};
+
+static Field refSym[] = {
+	FIELD(u32, sumName)
+	FIELD(u32, ibSym)
+	FIELD(u16, imod)
+	FIELD(u16, usFill)
+	FIELD(lps, name) {}
+};
+
+static Field pubSym[] = {
+	FIELD(u32, pubsymflags)
+	FIELD(u32, off)
+	FIELD(u16, seg)
+	FIELD(lps, name) {}
+};
+
+struct Field dataSym[] = {
+	FIELD(u32, typind)
+	FIELD(u32, off)
+	FIELD(u16, seg)
+	FIELD(lps, name) {}
+};
+
 void dump_dbiHdr(void* data)
 {
 	base = data;
@@ -158,5 +198,48 @@ void dump_modInfo(void* data)
 	leave_scope();
 }
 
+void dump_symbol(void* data)
+{
+	int type = ((SYMTYPE*)data)->rectyp;
+
+	enter_scope("Symbol");
+	data = print_field(TYPE_u16, "reclen", data);
+	data = print_field(TYPE_u16, "rectyp", data);
+
+	switch(type) {
+	case S_CONSTANT_ST:
+		data = print_fields(constSym, data, "S_CONSTANT_ST");
+		break;
+	case S_UDT_ST:
+		data = print_fields(udt, data, "S_UDT_ST");
+		break;
+	case S_PROCREF_ST:
+		data = print_fields(refSym, data, "S_PROCREF_ST");
+		break;
+	case S_LPROCREF_ST:
+		data = print_fields(refSym, data, "S_LPROCREF_ST");
+		break;
+	case S_PUB32_ST:
+		data = print_fields(pubSym, data, "S_PUB32_ST");
+		break;
+	case S_GDATA32_ST:
+		data = print_fields(dataSym, data, "S_GDATA32_ST");
+		break;
+	case S_LDATA32_ST:
+		data = print_fields(dataSym, data, "S_LDATA32_ST");
+		break;
+	default:
+		printf("unknown\n");
+
+	};
+
+
+	leave_scope();
+}
+
+void dump_setBase(void* data)
+{
+	base = data;
+}
 
 }
