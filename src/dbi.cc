@@ -2,6 +2,8 @@
 #include "pdblib_.h"
 #include "pdblib.h"
 #include "dataPos.h"
+#include "dump.h"
+#define DEBUG_DUMP
 
 using namespace PdbLib;
 
@@ -9,6 +11,9 @@ int PdbFile::_dbi_init()
 {
 	// Dbi Header
 	DataPos dataPos(msf[3]);
+#ifdef DEBUG_DUMP
+	dump_dbiHdr(dataPos._ptr());
+#endif
 	if(!dataPos.pGet<DbiHdr>(dbiHdr))
 		return -1;
 
@@ -16,8 +21,12 @@ int PdbFile::_dbi_init()
 	if(!dataPos._chkSetEnd(dbiHdr->ModInfoSize))
 		return -2;
 	while(dataPos.chk()) {
+#ifdef DEBUG_DUMP
+		dump_modInfo(dataPos._ptr());
+#endif
 		auto& mi = modInfo.xnxalloc();
 		if(!dataPos.pGet(mi.hdr)) return -2;
+		if(!dataPos.getStr()) return -2;
 		if(!dataPos.pGetStr(mi.ObjFileName)) return -2;
 		dataPos.align(4);
 	}

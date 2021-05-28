@@ -7,7 +7,9 @@ set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ../bin)
 
 include_directories(include src)
 add_library(pdbLib src/msf.cc src/dbi.cc src/symb.cc 
-	src/pdblib_.cc src/pdblib.cc)
+	src/pdblib_.cc src/pdblib.cc
+	src/dump.cc
+)
 
 link_libraries(pdbLib -lexshit -lstdshit)
 add_executable(test src/test.cc)

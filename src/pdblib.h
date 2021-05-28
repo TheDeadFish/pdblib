@@ -53,6 +53,7 @@ struct DbiModInfo {
 	uint32_t Unused2;
 	uint32_t SourceFileNameIndex;
 	uint32_t PdbFilePathNameIndex;
+	char ModuleName[];
 };
 
 struct DbiOptHdr {
@@ -71,7 +72,6 @@ struct DbiOptHdr {
 
 struct ModInfo {
 	DbiModInfo* hdr;
-	char* ModuleName;
 	char* ObjFileName;
 };
 
