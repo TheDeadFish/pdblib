@@ -33,8 +33,6 @@ int PdbFile::_dbi_init()
 
 	// Section Contribution
 	dataPos.setEnd(msf[3]);
-	printf("%X\n", dataPos.ref<int>());
-	
 	if(!dataPos.pGetXa(sectCont, dbiHdr->SectionContributionSize))
 		return -3;
 
@@ -51,30 +49,5 @@ int PdbFile::_dbi_init()
 	memncpy(&dbiOptHdr, _optHdr, sizeof(DbiOptHdr),
 		dbiHdr->OptionalDbgHeaderSize, -1);
 
-	printf("%X\n", dbiOptHdr.FPO);
-
 	return 0;
 }
-
-
-
-#define X(name) \
-   printf(#name": %d\n", index.name);
-
-
-/*
-void dbi_print(DbiIndex& index)
-{
-	X(FPO) X(Exception)	X(Fixup)
-	X(Omap_To_Source)	X(Omap_From_Source)
-	X(Section_Header)	X(Token_RID_Map)
-	X(Xdata) X(Pdata) X(New_FPO)
-	X(Org_Section_Header)
-
-	// dbi header indexes
-	X(GlobalStreamIndex)
-	X(PublicStreamIndex)
-	X(SymRecordStream)
-	X(MFCTypeServerIndex)
-}
-*/
