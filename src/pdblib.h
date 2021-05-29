@@ -75,6 +75,13 @@ struct ModInfo {
 	char* ObjFileName;
 };
 
+struct Fixup {
+	u16 Type;
+	u16 Flags;
+	u32 Rva;
+	u32 RvaTarget;
+};
+
 };
 
 
@@ -132,6 +139,7 @@ struct PdbFile
 	xarray<PdbLib::DbiSectContr> sectCont;
 	PdbLib::DbiOptHdr dbiOptHdr;
 
+	xarray<PdbLib::Fixup> fixup;
 
 
 

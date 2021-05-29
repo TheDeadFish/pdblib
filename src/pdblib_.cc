@@ -22,6 +22,13 @@ int PdbFile::load(cch* name)
 		if((!msf.chk(dbiHdr->SymRecordStream))
 		||(!pdb_symb_parse(*this, msf[dbiHdr->SymRecordStream])))
 			return ERRDEF(3, dbiHdr->SymRecordStream);
+
+	if(msf.chk(dbiOptHdr.Fixup)) {
+		fixup.initb(msf[dbiOptHdr.Fixup]);
+#ifdef DEBUG_DUMP
+		for(auto& f : fixup)
+			PdbLib::dump_fixup(&f);
+#endif
 	}
 	
 	// mapping

@@ -1,6 +1,7 @@
 #include <stdshit.h>
 #include "pdblib.h"
 #include "cvinfo.h"
+#include "dump.h"
 
 namespace PdbLib {
 
@@ -150,6 +151,13 @@ static Field modInfo[] = {
 	FIELD(str, ObjFileName) {}
 };
 
+static Field fixup[] = {
+	FIELD(u16, Type)
+	FIELD(u16, Flags)
+	FIELD(u32, Rva)
+	FIELD(u32, RvaTarget) {}
+};
+
 static Field constSym[] = {
 	FIELD(u32, typind)
 	FIELD(u16, value)
@@ -235,6 +243,12 @@ void dump_symbol(void* data)
 
 
 	leave_scope();
+}
+
+void dump_fixup(void* data)
+{
+	dump_setBase(NULL);
+	print_fields(fixup, data, "FIXUP");
 }
 
 void dump_setBase(void* data)
