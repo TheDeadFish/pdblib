@@ -1,6 +1,8 @@
 #include <stdshit.h>
 #include "pdblib_.h"
 #include "msf.h"
+#include "dump.h"
+//#define DEBUG_DUMP
 
 #define ERRDEF(step, file) ((step|0x100)|(file<<16))
 

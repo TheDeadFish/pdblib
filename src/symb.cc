@@ -3,7 +3,7 @@
 #include "cvinfo.h"
 #include "dataPos.h"
 #include "dump.h"
-#define DEBUG_DUMP
+//#define DEBUG_DUMP
 
 
 u8 value_list[] = {

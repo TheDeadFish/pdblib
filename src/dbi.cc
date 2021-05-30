@@ -3,7 +3,7 @@
 #include "pdblib.h"
 #include "dataPos.h"
 #include "dump.h"
-#define DEBUG_DUMP
+//#define DEBUG_DUMP
 
 using namespace PdbLib;
 
